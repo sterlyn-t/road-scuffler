@@ -1,7 +1,7 @@
 import pygame
 
 class Fighter():
-    def __init__(self, player, x, y, flip, data, sprite_sheet, animation_steps, sound):
+    def __init__(self, player, x, y, flip, data, sprite_sheet, animation_steps, sound, score):
         self.player = player
         self.size = data[0]
         self.image_scale = data[1]
@@ -22,6 +22,7 @@ class Fighter():
         self.attack_sound = sound
         self.hit = False
         self.health = 100
+        self.player_score = score
         self.alive = True
 
     def draw(self, surface):

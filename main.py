@@ -22,7 +22,6 @@ WHITE = (255, 255, 255)
 # Define game variables
 intro_count = 3
 last_count_update = pygame.time.get_ticks()
-score = [0, 0]
 round_over = False
 ROUND_OVER_COOLDOWN = 2000
 
@@ -85,16 +84,16 @@ def draw_health_bars(health, x, y):
 run_game = True
 
 # Create fighters
-fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_FRAMES, sword_fx)
-fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_FRAMES, magic_fx)
+fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_FRAMES, sword_fx, 0)
+fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_FRAMES, magic_fx, 0)
 
 while run_game:
     clock.tick(FPS)
     draw_background()
     draw_health_bars(fighter_1.health, 20, 20)
     draw_health_bars(fighter_2.health, 580, 20)
-    draw_text("P1: " + str(score[0]), score_font, RED, 20, 60)
-    draw_text("P2: " + str(score[1]), score_font, RED, 580, 60)
+    draw_text("P1: " + str(fighter_1.player_score), score_font, RED, 20, 60)
+    draw_text("P2: " + str(fighter_2.player_score), score_font, RED, 580, 60)
 
     if intro_count <= 0:
         # Move fighters
@@ -116,11 +115,11 @@ while run_game:
     # Checking for player defeat
     if round_over == False:
         if fighter_1.alive == False:
-            score[1] += 1
+            fighter_2.player_score += 1
             round_over = True
             round_over_time = pygame.time.get_ticks()
         elif fighter_2.alive == False:
-            score[0] += 1
+            fighter_1.player_score += 1
             round_over = True
             round_over_time = pygame.time.get_ticks()
     else: 
@@ -128,8 +127,8 @@ while run_game:
         if pygame.time.get_ticks() - round_over_time > ROUND_OVER_COOLDOWN:
             round_over = False
             intro_count = 4
-            fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_FRAMES, sword_fx)
-            fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_FRAMES, magic_fx)
+            fighter_1 = Fighter(1, 200, 310, False, WARRIOR_DATA, warrior_sheet, WARRIOR_ANIMATION_FRAMES, sword_fx, fighter_1.player_score)
+            fighter_2 = Fighter(2, 700, 310, True, WIZARD_DATA, wizard_sheet, WIZARD_ANIMATION_FRAMES, magic_fx, fighter_2.player_score)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
